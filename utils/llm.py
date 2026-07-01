@@ -1,3 +1,242 @@
+import os
+import logging
+import traceback
+
+import streamlit as st
+
+
+# -----------------------------
+# Logging
+# -----------------------------
+
+logging.basicConfig(
+    level=logging.INFO
+)
+
+logger = logging.getLogger("BizPilot")
+
+
+# -----------------------------
+# Config
+# -----------------------------
+
+GEMINI_MODEL = "gemini-2.5-flash"
+
+GROQ_MODEL = "llama-3.3-70b-versatile"
+
+TEMPERATURE = 0.3
+
+
+# -----------------------------
+# Secret Loader
+# -----------------------------
+
+def get_secret(name):
+
+    # Streamlit Cloud
+    try:
+        return st.secrets[name]
+
+    except Exception:
+        pass
+
+
+    # Local .env
+    return os.getenv(name)
+
+
+
+# -----------------------------
+# Gemini Provider
+# -----------------------------
+
+def call_gemini(prompt):
+
+    from google import genai
+    from google.genai import types
+
+    key = get_secret(
+        "GEMINI_API_KEY"
+    )
+
+    if not key:
+        raise ValueError(
+            "Gemini key missing"
+        )
+
+
+    client = genai.Client(
+        api_key=key
+    )
+
+
+    logger.info(
+        "Calling Gemini"
+    )
+
+
+    response = client.models.generate_content(
+        model=GEMINI_MODEL,
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            temperature=TEMPERATURE,
+            top_p=0.95,
+            max_output_tokens=4096,
+        )
+    )
+
+
+    if not response.text:
+        raise Exception(
+            "Empty Gemini response"
+        )
+
+
+    return response.text
+
+
+
+# -----------------------------
+# Groq Provider
+# -----------------------------
+
+def call_groq(prompt):
+
+    from groq import Groq
+
+
+    key = get_secret(
+        "GROQ_API_KEY"
+    )
+
+
+    if not key:
+        raise ValueError(
+            "Groq key missing"
+        )
+
+
+    client = Groq(
+        api_key=key
+    )
+
+
+    logger.info(
+        "Calling Groq fallback"
+    )
+
+
+    response = client.chat.completions.create(
+        model=GROQ_MODEL,
+        messages=[
+            {
+                "role": "system",
+                "content": """
+You are BizPilot AI.
+
+You help entrepreneurs with:
+- business entity decisions
+- accounting stack selection
+- tax readiness
+- workforce planning
+- integrations
+
+Give practical recommendations.
+Avoid pretending to provide legal advice.
+"""
+            },
+            {
+                "role": "user",
+                "content": prompt
+            }
+        ],
+        temperature=TEMPERATURE,
+        max_tokens=4096
+    )
+
+
+    return response.choices[0].message.content
+
+
+
+# -----------------------------
+# Final Fallback
+# -----------------------------
+
+def fallback_response(prompt):
+
+    logger.warning(
+        "Using deterministic fallback"
+    )
+
+
+    return f"""
+BizPilot AI Analysis
+
+Input:
+{prompt}
+
+
+AI provider unavailable.
+
+The system can still provide:
+- workflow analysis
+- compliance checklist generation
+- accounting architecture mapping
+
+Please configure an AI provider key.
+"""
+
+
+
+# -----------------------------
+# Main LLM Router
+# -----------------------------
+
 def call_llm(prompt: str):
-    # Replace this with Gemini / OpenAI API later
-    return f"LLM_RESPONSE: {prompt[:200]}"
+
+
+    # Priority 1:
+    # Gemini
+
+    try:
+
+        if get_secret("GEMINI_API_KEY"):
+
+            return call_gemini(prompt)
+
+    except Exception as e:
+
+        logger.error(
+            f"Gemini failed: {e}"
+        )
+
+        logger.error(
+            traceback.format_exc()
+        )
+
+
+    # Priority 2:
+    # Groq
+
+    try:
+
+        if get_secret("GROQ_API_KEY"):
+
+            return call_groq(prompt)
+
+    except Exception as e:
+
+        logger.error(
+            f"Groq failed: {e}"
+        )
+
+        logger.error(
+            traceback.format_exc()
+        )
+
+
+    # Priority 3:
+    # Rules
+
+    return fallback_response(prompt)
