@@ -14,7 +14,15 @@ from mcp_server.tools import (
 # when Streamlit has already configured the root
 # logger (basicConfig is a no-op in that case).
 # ─────────────────────────────────────────────
+import os
+import logging
 _log_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "logs", "mcp_activity.log")
+_log_dir = os.path.dirname(_log_path)
+
+os.makedirs(
+    _log_dir,
+    exist_ok=True
+)
 logger = logging.getLogger("MCP")
 logger.setLevel(logging.INFO)
 # Only add the handler once (guards against module reload in Streamlit)
