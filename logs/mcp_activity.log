@@ -1,0 +1,10 @@
+2026-06-29 14:54:22 | INFO    | MCP Tool Called: entity_structure     | revenue=0 | state=New York
+2026-06-29 14:54:22 | INFO    | MCP Tool Completed: entity_structure   | Single Member LLC
+2026-06-29 14:54:24 | INFO    | MCP Tool Called: workforce            | revenue=0
+2026-06-29 14:54:24 | INFO    | MCP Tool Completed: workforce          | No Hire - Automate or Delay
+2026-06-29 14:54:26 | INFO    | MCP Tool Called: tax_checklist        | revenue=0 | state=New York | structure=Single-Member LLC | workforce_decision=No Hire - Automate or Delay
+2026-06-29 14:54:26 | INFO    | MCP Tool Completed: tax_checklist      | 2 tax forms
+2026-06-29 14:54:29 | INFO    | MCP Tool Called: accounting_stack     | revenue=0
+2026-06-29 14:54:29 | INFO    | MCP Tool Completed: accounting_stack   | ['Shopify', 'Stripe', 'Excel / Google Sheets']
+2026-06-29 14:54:32 | INFO    | MCP Tool Called: integration_map      | workforce_decision=No Hire - Automate or Delay
+2026-06-29 14:54:32 | INFO    | MCP Tool Completed: integration_map    | Accounting System
