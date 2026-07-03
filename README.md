@@ -1,3 +1,4 @@
+
 # 🚀 BizPilot AI
 
 > **An AI-powered Multi-Agent Business Formation & Finance Architect built using Google ADK, MCP, and Large Language Models.**
@@ -184,6 +185,8 @@ Threat modeling implemented using STRIDE methodology covering:
 ```
 
 ---
+
+<img width="1536" height="1024" alt="BizPilot Workflow" src="https://github.com/user-attachments/assets/fabae8b6-65ef-40d9-92e9-23c3165ec6f0" />
 
 # 🤖 Multi-Agent Architecture
 
