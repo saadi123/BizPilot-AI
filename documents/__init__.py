@@ -1,1 +1,1 @@
-# EcomFinance OS - Document Package Generator
+# BizPilot AI - Document Package Generator

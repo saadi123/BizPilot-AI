@@ -140,7 +140,7 @@ def _cover_page(elements, profile, styles):
 
     # Full-width dark banner table
     banner_content = [
-        [Paragraph("🚀 EcomFinance OS", styles["cover_title"])],
+        [Paragraph("🚀 BizPilot AI", styles["cover_title"])],
         [Paragraph("30-Day Business Launch Package", styles["cover_subtitle"])],
         [Paragraph("— Powered by Multi-Agent AI Architecture —", styles["cover_meta"])],
     ]

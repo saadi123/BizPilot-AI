@@ -13,11 +13,11 @@ from documents.generator import generate_business_package, REPORTLAB_AVAILABLE
 
 
 st.set_page_config(
-    page_title="EcomFinance OS",
+    page_title="BizPilot AI",
     layout="wide"
 )
 
-st.title("🚀 EcomFinance OS")
+st.title("🚀 BizPilot AI")
 st.subheader("AI Business Formation & Finance Architect")
 
 guard = GuardrailManager()
@@ -767,7 +767,7 @@ if st.session_state.result is not None:
                         st.download_button(
                             label="⬇️ Download Business Launch Package (PDF)",
                             data=pdf_bytes,
-                            file_name="EcomFinanceOS_Business_Launch_Package.pdf",
+                            file_name="BizPilotAI_Business_Launch_Package.pdf",
                             mime="application/pdf",
                             type="primary",
                         )

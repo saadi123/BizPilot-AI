@@ -6,7 +6,7 @@ from agents.accounting_agent import accounting_agent
 from agents.integration_agent import integration_agent
 
 
-print("🚀 Loading EcomFinance OS Agent System\n")
+print("🚀 Loading BizPilot AI Agent System\n")
 
 
 agents = [
