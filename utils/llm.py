@@ -195,49 +195,32 @@ Please configure an AI provider key.
 
 def call_llm(prompt: str):
 
+    errors = []
 
-    # Priority 1:
-    # Gemini
-
-    try:
-
-        if get_secret("GEMINI_API_KEY"):
-
+    # Priority 1: Gemini
+    gemini_key = get_secret("GEMINI_API_KEY")
+    if gemini_key:
+        try:
             return call_gemini(prompt)
+        except Exception as e:
+            logger.error(f"Gemini failed: {e}")
+            logger.error(traceback.format_exc())
+            errors.append(f"Gemini Error: {str(e)}")
 
-    except Exception as e:
-
-        logger.error(
-            f"Gemini failed: {e}"
-        )
-
-        logger.error(
-            traceback.format_exc()
-        )
-
-
-    # Priority 2:
-    # Groq
-
-    try:
-
-        if get_secret("GROQ_API_KEY"):
-
+    # Priority 2: Groq
+    groq_key = get_secret("GROQ_API_KEY")
+    if groq_key:
+        try:
             return call_groq(prompt)
+        except Exception as e:
+            logger.error(f"Groq failed: {e}")
+            logger.error(traceback.format_exc())
+            errors.append(f"Groq Error: {str(e)}")
 
-    except Exception as e:
+    # Priority 3: Error
+    if errors:
+        st.error("AI Provider failed to generate a response:\n\n" + "\n\n".join(errors))
+        st.stop()
 
-        logger.error(
-            f"Groq failed: {e}"
-        )
-
-        logger.error(
-            traceback.format_exc()
-        )
-
-
-    # Priority 3:
-    # Rules
-    
     st.error("No API key found. Please enter your API key")
     st.stop()
