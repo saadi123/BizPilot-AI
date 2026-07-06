@@ -117,7 +117,8 @@ def call_groq(prompt):
 
 
     client = Groq(
-        api_key=key
+        api_key=key,
+        timeout=120.0
     )
 
 
