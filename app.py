@@ -72,6 +72,11 @@ if "result" not in st.session_state:
 # -------------------------
 if st.button("Generate Business Blueprint"):
 
+    from utils.llm import get_secret
+    if not get_secret("GEMINI_API_KEY") and not get_secret("GROQ_API_KEY"):
+        st.error("No API key found. Please enter your API key")
+        st.stop()
+
     # ── Build profile first so guardrail has full context ──
     profile_candidate = {
         "industry": industry,

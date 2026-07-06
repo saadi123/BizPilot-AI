@@ -238,5 +238,6 @@ def call_llm(prompt: str):
 
     # Priority 3:
     # Rules
-
-    return fallback_response(prompt)
+    
+    st.error("No API key found. Please enter your API key")
+    st.stop()
